@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeView } from '../../redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { changeView, changeTab } from '../../redux';
 
 import clsx from 'clsx';
 import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+
+import {
+	Drawer,
+	AppBar,
+	Toolbar,
+	CssBaseline,
+	Typography,
+	Divider,
+	ListItem,
+	ListItemIcon,
+	ListItemText,
+	IconButton,
+	InputBase
+} from '@material-ui/core';
 
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -30,20 +32,12 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex'
 	},
 	appBar: {
-		zIndex: theme.zIndex.drawer + 1
-		// transition: theme.transitions.create([ 'width', 'margin' ], {
-		// 	easing: theme.transitions.easing.sharp,
-		// 	duration: theme.transitions.duration.leavingScreen
-		// })
+		zIndex: theme.zIndex.drawer + 1,
+		height: theme.mixins.toolbar.minHeight
 	},
 	appBarShift: {
 		marginLeft: drawerWidth,
-		// width: `calc(100% - ${drawerWidth}px)`,
 		width: '100%'
-		// transition: theme.transitions.create([ 'width', 'margin' ], {
-		// 	easing: theme.transitions.easing.sharp,
-		// 	duration: theme.transitions.duration.enteringScreen
-		// })
 	},
 	menuButton: {
 		marginRight: 36
@@ -53,8 +47,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	drawer: {
 		width: drawerWidth,
-		// flexShrink: 0,
-		// whiteSpace: 'nowrap',
 		justifyContent: 'space-evenly'
 	},
 	drawerOpen: {
@@ -136,31 +128,18 @@ const Navbar = (props) => {
 	const theme = useTheme();
 	const dispatch = useDispatch();
 	const [ open, setOpen ] = useState(false);
-
+	console.log(theme);
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<AppBar
-				position="fixed"
-				className={clsx(
-					classes.appBar
-					//     , {
-					// 	[classes.appBarShift]: open
-					// }
-				)}
-			>
+			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
 						onClick={() => setOpen(!open)}
 						edge="start"
-						className={clsx(
-							classes.menuButton,
-							{
-								// [classes.hide]: open
-							}
-						)}
+						className={classes.menuButton}
 					>
 						{open ? <ChevronLeftIcon /> : <MenuIcon />}
 					</IconButton>
@@ -198,24 +177,35 @@ const Navbar = (props) => {
 				}}
 				open={open}
 			>
-				<ListItem button onClick={() => dispatch(changeView('films'))} key={'Películas'}>
+				<ListItem
+					button
+					onClick={() => {
+						dispatch(changeView('films'));
+						dispatch(changeTab(0));
+					}}
+					key={'Películas'}
+				>
 					<ListItemIcon>
 						<TheatersIcon />
 					</ListItemIcon>
 					<ListItemText primary={'Películas'} />
 				</ListItem>
 				<Divider />
-				<ListItem button onClick={() => dispatch(changeView('people'))} key={'Personajes'}>
+				<ListItem
+					button
+					onClick={() => {
+						dispatch(changeView('people'));
+						dispatch(changeTab(0));
+					}}
+					key={'Personajes'}
+				>
 					<ListItemIcon>
 						<FaceIcon />
 					</ListItemIcon>
 					<ListItemText primary={'Personajes'} />
 				</ListItem>
 			</Drawer>
-			<main className={classes.content}>
-				{/* <div className={classes.toolbar} /> */}
-				{props.children}
-			</main>
+			<main className={classes.content}>{props.children}</main>
 		</div>
 	);
 };

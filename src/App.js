@@ -1,14 +1,15 @@
 import React from 'react';
 import Navbar from './components/layout/Navbar';
 import TabRouter from './components/layout/TabRouter';
-import CharacterList from './components/CharacterList';
+import ItemList from './components/ItemList';
+import ItemCard from './components/ItemCard';
 
 const App = () => {
 	return (
 		<Navbar>
 			<TabRouter>
-				<CharacterList />
-				<h1>CULO</h1>
+				<ItemList />
+				<ItemCard />
 			</TabRouter>
 		</Navbar>
 	);

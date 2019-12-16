@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeTab } from '../../redux';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -48,22 +50,15 @@ const useStyles = makeStyles((theme) => ({
 export default function TabRouter(props) {
 	const classes = useStyles();
 	const theme = useTheme();
-	const [ value, setValue ] = React.useState(0);
-
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
-
-	const handleChangeIndex = (index) => {
-		setValue(index);
-	};
+	const value = useSelector((state) => state.navigation.activeTab);
+	const dispatch = useDispatch();
 
 	return (
 		<div className={classes.root}>
 			<AppBar position="static" color="default">
 				<Tabs
 					value={value}
-					onChange={handleChange}
+					onChange={(e, tab) => dispatch(changeTab(tab))}
 					indicatorColor="primary"
 					textColor="primary"
 					variant="fullWidth"
@@ -73,11 +68,7 @@ export default function TabRouter(props) {
 					<Tab label="Detalle" {...a11yProps(1)} />
 				</Tabs>
 			</AppBar>
-			<SwipeableViews
-				axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-				index={value}
-				onChangeIndex={handleChangeIndex}
-			>
+			<SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value}>
 				{props.children.map((page, index) => (
 					<TabPanel value={value} index={index} dir={theme.direction}>
 						{page}

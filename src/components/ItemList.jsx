@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getPeople, getFilms } from '../redux';
+import { getPeople, getFilms, changeSelected, changeTab } from '../redux';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const CharacterList = () => {
+const ItemList = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const people = useSelector((state) => state.people.people);
@@ -40,7 +40,13 @@ const CharacterList = () => {
 				<InfiniteScroll loadMore={() => dispatch(getPeople('', next))} hasMore={!!next}>
 					{people.map((character, index) => (
 						<React.Fragment key={character.url}>
-							<ListItem button>
+							<ListItem
+								button
+								onClick={() => {
+									dispatch(changeSelected('people', character));
+									dispatch(changeTab(1));
+								}}
+							>
 								<ListItemText primary={character.name} />
 							</ListItem>
 							{index !== people.length - 1 && <Divider />}
@@ -51,7 +57,13 @@ const CharacterList = () => {
 			{currentView === 'films' &&
 				films.map((film, index) => (
 					<React.Fragment key={film.episode_id}>
-						<ListItem button>
+						<ListItem
+							button
+							onClick={() => {
+								dispatch(changeSelected('films', film));
+								dispatch(changeTab(1));
+							}}
+						>
 							<ListItemText primary={film.title} />
 						</ListItem>
 						{index !== films.length - 1 && <Divider />}
@@ -61,4 +73,4 @@ const CharacterList = () => {
 	);
 };
 
-export default CharacterList;
+export default ItemList;
