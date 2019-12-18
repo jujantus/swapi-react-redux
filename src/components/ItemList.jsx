@@ -15,12 +15,14 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const ItemList = () => {
+export const ItemList = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const people = useSelector((state) => state.people.people);
 	const films = useSelector((state) => state.films.films);
 	const currentView = useSelector((state) => state.navigation.currentView);
+	const peopleSearch = useSelector((state) => state.people.searchResults);
+	const selectedFilms = useSelector((state) => state.films.selectedFilms);
 	const next = useSelector((state) => state.people.next);
 
 	useEffect(
@@ -34,43 +36,47 @@ const ItemList = () => {
 		[ currentView ]
 	);
 
+	const renderPeople = (data) => {
+		return data.map((character, index) => (
+			<React.Fragment key={character.url}>
+				<ListItem
+					button
+					onClick={() => {
+						dispatch(changeSelected('people', character));
+						dispatch(changeTab(1));
+					}}
+				>
+					<ListItemText primary={character.name} />
+				</ListItem>
+				{index !== people.length - 1 && <Divider />}
+			</React.Fragment>
+		));
+	};
+
+	const renderFilms = (data) =>
+		data.map((film, index) => (
+			<React.Fragment key={film.episode_id}>
+				<ListItem
+					button
+					onClick={() => {
+						dispatch(changeSelected('films', film));
+						dispatch(changeTab(1));
+					}}
+				>
+					<ListItemText primary={film.title} />
+				</ListItem>
+				{index !== films.length - 1 && <Divider />}
+			</React.Fragment>
+		));
+
 	return (
 		<React.Fragment>
 			{currentView === 'people' && (
-				<InfiniteScroll loadMore={() => dispatch(getPeople('', next))} hasMore={!!next}>
-					{people.map((character, index) => (
-						<React.Fragment key={character.url}>
-							<ListItem
-								button
-								onClick={() => {
-									dispatch(changeSelected('people', character));
-									dispatch(changeTab(1));
-								}}
-							>
-								<ListItemText primary={character.name} />
-							</ListItem>
-							{index !== people.length - 1 && <Divider />}
-						</React.Fragment>
-					))}
+				<InfiniteScroll loadMore={() => dispatch(getPeople('', next))} hasMore={!!next && !peopleSearch}>
+					{peopleSearch ? renderPeople(peopleSearch) : renderPeople(people)}
 				</InfiniteScroll>
 			)}
-			{currentView === 'films' &&
-				films.map((film, index) => (
-					<React.Fragment key={film.episode_id}>
-						<ListItem
-							button
-							onClick={() => {
-								dispatch(changeSelected('films', film));
-								dispatch(changeTab(1));
-							}}
-						>
-							<ListItemText primary={film.title} />
-						</ListItem>
-						{index !== films.length - 1 && <Divider />}
-					</React.Fragment>
-				))}
+			{currentView === 'films' && (selectedFilms ? renderFilms(selectedFilms) : renderFilms(films))}
 		</React.Fragment>
 	);
 };
-
-export default ItemList;

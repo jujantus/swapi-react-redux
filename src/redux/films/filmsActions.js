@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_FILMS, FETCH_FILMS_SUCCESS, FETCH_FILMS_ERROR } from './filmsTypes';
+import { FETCH_FILMS, FETCH_FILMS_SUCCESS, FETCH_FILMS_ERROR, SET_SELECTED_FILMS } from './filmsTypes';
 
 const fetchFilms = () => {
 	return {
@@ -10,6 +10,13 @@ const fetchFilms = () => {
 const fetchFilmsSuccess = (films) => {
 	return {
 		type: FETCH_FILMS_SUCCESS,
+		films: films
+	};
+};
+
+export const setSelectedFilms = (films) => {
+	return {
+		type: SET_SELECTED_FILMS,
 		films: films
 	};
 };

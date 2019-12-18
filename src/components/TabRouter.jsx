@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeTab } from '../../redux';
+import { changeTab } from '../redux';
 import PropTypes from 'prop-types';
 import SwipeableViews from 'react-swipeable-views';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -43,14 +43,16 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
 	root: {
 		backgroundColor: theme.palette.background.paper,
-		padding: 0
+		padding: 0,
+		width: '100%'
 	}
 }));
 
-export default function TabRouter(props) {
+export const TabRouter = (props) => {
 	const classes = useStyles();
 	const theme = useTheme();
 	const value = useSelector((state) => state.navigation.activeTab);
+	const selected = useSelector((state) => state.navigation.selected);
 	const dispatch = useDispatch();
 
 	return (
@@ -65,16 +67,16 @@ export default function TabRouter(props) {
 					aria-label="full width tabs example"
 				>
 					<Tab label="Lista" {...a11yProps(0)} />
-					<Tab label="Detalle" {...a11yProps(1)} />
+					<Tab disabled={!selected} label="Detalle" {...a11yProps(1)} />
 				</Tabs>
 			</AppBar>
 			<SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value}>
 				{props.children.map((page, index) => (
-					<TabPanel value={value} index={index} dir={theme.direction}>
+					<TabPanel key={index} value={value} index={index} dir={theme.direction}>
 						{page}
 					</TabPanel>
 				))}
 			</SwipeableViews>
 		</div>
 	);
-}
+};

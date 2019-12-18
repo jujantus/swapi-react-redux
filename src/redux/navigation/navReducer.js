@@ -4,7 +4,7 @@ const initialState = {
 	currentView: 'films',
 	activeTab: 0,
 	selectedType: '',
-	selected: {}
+	selected: null
 };
 
 const navReducer = (state = initialState, action) => {

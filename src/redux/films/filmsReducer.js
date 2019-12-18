@@ -1,8 +1,9 @@
-import { FETCH_FILMS, FETCH_FILMS_SUCCESS, FETCH_FILMS_ERROR } from './filmsTypes';
+import { FETCH_FILMS, FETCH_FILMS_SUCCESS, FETCH_FILMS_ERROR, SET_SELECTED_FILMS } from './filmsTypes';
 
 const initialState = {
 	loading: false,
 	films: [],
+	selectedFilms: null,
 	error: ''
 };
 
@@ -26,6 +27,11 @@ const filmsReducer = (state = initialState, action) => {
 				loading: false,
 				films: state.films,
 				error: action.error
+			};
+		case SET_SELECTED_FILMS:
+			return {
+				...state,
+				selectedFilms: action.films
 			};
 		default:
 			return state;

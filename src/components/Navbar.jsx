@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { changeView, changeTab } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeView, changeTab, getPeople, getPerson, fetchPersonSuccess, setSelectedFilms } from '../redux';
 
 import clsx from 'clsx';
 import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
@@ -29,7 +29,9 @@ const drawerWidth = 180;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: 'flex'
+		display: 'flex',
+		height: '100vh',
+		width: '100vw'
 	},
 	appBar: {
 		zIndex: theme.zIndex.drawer + 1,
@@ -79,10 +81,10 @@ const useStyles = makeStyles((theme) => ({
 		...theme.mixins.toolbar
 	},
 	content: {
+		display: 'flex',
 		flexGrow: 1,
-		padding: theme.spacing(0),
-		marginTop: theme.mixins.toolbar.minHeight,
-		overflowY: 'scroll'
+		paddingTop: theme.mixins.toolbar.minHeight,
+		height: '100vh'
 	},
 	search: {
 		position: 'relative',
@@ -123,12 +125,34 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const Navbar = (props) => {
+export const Navbar = (props) => {
 	const classes = useStyles();
 	const theme = useTheme();
 	const dispatch = useDispatch();
+
+	const currentView = useSelector((state) => state.navigation.currentView);
+	const films = useSelector((state) => state.films.films);
 	const [ open, setOpen ] = useState(false);
-	console.log(theme);
+
+	const handleSearch = (e) => {
+		if (e.target.value === '') {
+			if (currentView === 'people') {
+				dispatch(fetchPersonSuccess(null));
+			} else if (currentView === 'films') {
+				dispatch(setSelectedFilms(null));
+			}
+		} else {
+			if (currentView === 'people') {
+				dispatch(getPerson(e.target.value));
+			} else if (currentView === 'films') {
+				const selectedFilms = films.filter((el) =>
+					el.title.toUpperCase().includes(e.target.value.toUpperCase())
+				);
+				dispatch(setSelectedFilms(selectedFilms));
+			}
+		}
+	};
+
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -153,12 +177,13 @@ const Navbar = (props) => {
 							<SearchIcon />
 						</div>
 						<InputBase
-							placeholder="Search…"
+							placeholder={`Buscar ${currentView === 'people' ? 'personajes' : 'películas'}`}
 							classes={{
 								root: classes.inputRoot,
 								input: classes.inputInput
 							}}
 							inputProps={{ 'aria-label': 'search' }}
+							onChange={handleSearch}
 						/>
 					</div>
 				</Toolbar>
@@ -182,6 +207,7 @@ const Navbar = (props) => {
 					onClick={() => {
 						dispatch(changeView('films'));
 						dispatch(changeTab(0));
+						dispatch(fetchPersonSuccess(null));
 					}}
 					key={'Películas'}
 				>
@@ -196,6 +222,7 @@ const Navbar = (props) => {
 					onClick={() => {
 						dispatch(changeView('people'));
 						dispatch(changeTab(0));
+						dispatch(setSelectedFilms(null));
 					}}
 					key={'Personajes'}
 				>
@@ -209,5 +236,3 @@ const Navbar = (props) => {
 		</div>
 	);
 };
-
-export default Navbar;
