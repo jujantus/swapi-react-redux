@@ -111,7 +111,7 @@ export const ItemCard = (props) => {
 				</CardContent>
 				<img
 					className={classes.poster}
-					src={require(`../assets/images/${selected.episode_id}.jpg`)}
+					src={`${process.env.PUBLIC_URL}/images/${selected.episode_id}.jpg`}
 					alt={selected.title}
 				/>
 			</Card>

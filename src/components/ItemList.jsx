@@ -12,6 +12,12 @@ const useStyles = makeStyles((theme) => ({
 	root: {
 		width: '100%',
 		backgroundColor: theme.palette.background.paper
+	},
+	filmList: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-evenly',
+		height: '100%'
 	}
 }));
 
@@ -53,21 +59,24 @@ export const ItemList = () => {
 		));
 	};
 
-	const renderFilms = (data) =>
-		data.map((film, index) => (
-			<React.Fragment key={film.episode_id}>
-				<ListItem
-					button
-					onClick={() => {
-						dispatch(changeSelected('films', film));
-						dispatch(changeTab(1));
-					}}
-				>
-					<ListItemText primary={film.title} />
-				</ListItem>
-				{index !== films.length - 1 && <Divider />}
-			</React.Fragment>
-		));
+	const renderFilms = (data) => (
+		<div className={classes.filmList}>
+			{data.map((film, index) => (
+				<React.Fragment key={film.episode_id}>
+					<ListItem
+						button
+						onClick={() => {
+							dispatch(changeSelected('films', film));
+							dispatch(changeTab(1));
+						}}
+					>
+						<ListItemText primary={film.title} />
+					</ListItem>
+					{index !== films.length - 1 && <Divider />}
+				</React.Fragment>
+			))}
+		</div>
+	);
 
 	return (
 		<React.Fragment>
