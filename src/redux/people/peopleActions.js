@@ -31,9 +31,9 @@ const fetchPeopleError = (error) => {
 
 export const getPeople = (person = '', url = null) => {
 	return (dispatch) => {
-		dispatch(fetchPeople);
+		dispatch(fetchPeople());
 		axios
-			.get(url || 'https://swapi.co/api/people/' + person)
+			.get(url || 'https://swapi.co/api/people/')
 			.then((res) => {
 				const people = res.data.results;
 				const next = res.data.next;
@@ -48,7 +48,7 @@ export const getPeople = (person = '', url = null) => {
 
 export const getPerson = (person) => {
 	return (dispatch) => {
-		dispatch(fetchPeople);
+		dispatch(fetchPeople());
 		axios
 			.get('https://swapi.co/api/people/?search=' + person)
 			.then((res) => {

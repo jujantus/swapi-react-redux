@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPeople, getFilms, changeSelected, changeTab } from '../redux';
 import InfiniteScroll from 'react-infinite-scroller';
+import MDSpinner from 'react-md-spinner';
 
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
@@ -81,7 +82,11 @@ export const ItemList = () => {
 	return (
 		<React.Fragment>
 			{currentView === 'people' && (
-				<InfiniteScroll loadMore={() => dispatch(getPeople('', next))} hasMore={!!next && !peopleSearch}>
+				<InfiniteScroll
+					loadMore={() => dispatch(getPeople('', next))}
+					loader={<MDSpinner />}
+					hasMore={!!next && !peopleSearch}
+				>
 					{peopleSearch ? renderPeople(peopleSearch) : renderPeople(people)}
 				</InfiniteScroll>
 			)}

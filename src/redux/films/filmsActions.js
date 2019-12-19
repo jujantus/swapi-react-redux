@@ -30,7 +30,7 @@ const fetchFilmsError = (error) => {
 
 export const getFilms = () => {
 	return (dispatch) => {
-		dispatch(fetchFilms);
+		dispatch(fetchFilms());
 		axios
 			.get('https://swapi.co/api/films/')
 			.then((res) => {

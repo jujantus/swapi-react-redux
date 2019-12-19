@@ -4,7 +4,7 @@ import { translate } from '../utils';
 import { changeSelected } from '../redux';
 import clsx from 'clsx';
 
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -14,27 +14,37 @@ const useStyles = makeStyles((theme) => ({
 	card: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		height: '90%'
+		height: '100%',
+		width: '50%',
+		[theme.breakpoints.up('sm')]: {
+			flexDirection: 'column'
+		},
+		[theme.breakpoints.down('sm')]: {
+			width: '100%'
+		}
 	},
-	content: {
+	filmInfo: {
+		width: '60%',
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-around',
-		flex: '1 0 auto'
+		flex: '1 0 auto',
+		[theme.breakpoints.up('sm')]: {
+			width: '100%'
+		}
 	},
-
-	controls: {
-		display: 'flex',
-		alignItems: 'center',
-		paddingLeft: theme.spacing(1),
-		paddingBottom: theme.spacing(1)
+	filmLink: {
+		textDecoration: 'underline',
+		color: 'blue'
 	},
 	poster: {
-		height: '30vh',
-		objectFit: 'contain'
-	},
-	movieTitle: {
-		width: '40%'
+		objectFit: 'contain',
+		width: '40%',
+		margin: 'auto',
+		[theme.breakpoints.up('sm')]: {
+			height: '50%',
+			width: 'auto'
+		}
 	}
 }));
 
@@ -44,7 +54,6 @@ const matchFilm = (films, match) => {
 
 export const ItemCard = (props) => {
 	const classes = useStyles();
-	const theme = useTheme();
 	const selected = useSelector((state) => state.navigation.selected);
 	const selectedType = useSelector((state) => state.navigation.selectedType);
 	const films = useSelector((state) => state.films.films);
@@ -71,6 +80,7 @@ export const ItemCard = (props) => {
 						<ul>
 							{selected.films.map((film) => (
 								<li
+									className={classes.filmLink}
 									key={film}
 									onClick={() => dispatch(changeSelected('films', matchFilm(films, film)))}
 								>
@@ -95,25 +105,27 @@ export const ItemCard = (props) => {
 		const extraClasses = props.extraClasses || [];
 		return (
 			<Card className={clsx(classes.card, ...extraClasses)}>
-				<CardContent className={classes.content}>
-					<Typography className={classes.movieTitle} component="h5" variant="h5">
-						Título - {selected.title}
-					</Typography>
-					<Typography variant="subtitle1" color="textSecondary">
-						Director - {selected.director}
-					</Typography>
-					<Typography variant="subtitle1" color="textSecondary">
-						Productor - {selected.producer}
-					</Typography>
-					<Typography variant="subtitle1" color="textSecondary">
-						Fecha de estreno - {fecha}
-					</Typography>
-				</CardContent>
 				<img
 					className={classes.poster}
 					src={`${process.env.PUBLIC_URL}/images/${selected.episode_id}.jpg`}
 					alt={selected.title}
 				/>
+				<CardContent className={classes.filmInfo}>
+					<Typography component="h5" variant="h5">
+						Título - {selected.title}
+					</Typography>
+					<div>
+						<Typography variant="subtitle1" color="textSecondary">
+							Director - {selected.director}
+						</Typography>
+						<Typography variant="subtitle1" color="textSecondary">
+							Productor - {selected.producer}
+						</Typography>
+						<Typography variant="subtitle1" color="textSecondary">
+							Fecha de estreno - {fecha}
+						</Typography>
+					</div>
+				</CardContent>
 			</Card>
 		);
 	};

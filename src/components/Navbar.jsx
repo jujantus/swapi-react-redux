@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeView, changeTab, getPeople, getPerson, fetchPersonSuccess, setSelectedFilms } from '../redux';
-
+import { changeView, changeTab, getPerson, fetchPersonSuccess, setSelectedFilms } from '../redux';
 import clsx from 'clsx';
-import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 
 import {
 	Drawer,
@@ -94,10 +93,10 @@ const useStyles = makeStyles((theme) => ({
 			backgroundColor: fade(theme.palette.common.white, 0.25)
 		},
 		marginLeft: 0,
-		width: '100%',
+		width: 'auto%',
 		[theme.breakpoints.up('sm')]: {
 			marginLeft: theme.spacing(1),
-			width: 'auto'
+			width: 'auto%'
 		}
 	},
 	searchIcon: {
@@ -109,27 +108,25 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	pageTitle: {
+		marginRight: '10%'
+	},
 	inputRoot: {
 		color: 'inherit'
 	},
 	inputInput: {
 		padding: theme.spacing(1, 1, 1, 7),
 		transition: theme.transitions.create('width'),
-		width: '100%',
-		[theme.breakpoints.up('sm')]: {
-			width: 120,
-			'&:focus': {
-				width: 200
-			}
+		width: 180,
+		'&:focus': {
+			width: 250
 		}
 	}
 }));
 
 export const Navbar = (props) => {
 	const classes = useStyles();
-	const theme = useTheme();
 	const dispatch = useDispatch();
-
 	const currentView = useSelector((state) => state.navigation.currentView);
 	const films = useSelector((state) => state.films.films);
 	const [ open, setOpen ] = useState(false);
@@ -157,7 +154,7 @@ export const Navbar = (props) => {
 		<div className={classes.root}>
 			<CssBaseline />
 			<AppBar position="fixed" className={classes.appBar}>
-				<Toolbar>
+				<Toolbar className={classes.appbar}>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -168,7 +165,7 @@ export const Navbar = (props) => {
 						{open ? <ChevronLeftIcon /> : <MenuIcon />}
 					</IconButton>
 
-					<Typography variant="h6" noWrap>
+					<Typography variant="h6" className={classes.pageTitle} noWrap>
 						Star Wars
 					</Typography>
 

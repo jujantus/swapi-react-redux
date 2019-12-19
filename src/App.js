@@ -7,7 +7,8 @@ const useStyles = makeStyles((theme) => ({
 	item: {
 		width: '50%',
 		height: '100%',
-		overflow: 'auto'
+		overflow: 'auto',
+		borderRight: '1px solid #DEDEDE'
 	},
 	fixed: {
 		right: 0
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const App = () => {
 	const classes = useStyles();
-	const medium = useMediaQuery('(min-width:700px)');
+	const medium = useMediaQuery('(min-width:600px)');
 
 	const renderMobileBody = () => (
 		<React.Fragment>
